@@ -18,23 +18,36 @@ app.get('/', (req, res) => {
     res.send(403)
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const Userdata = req.body.User
 
     const Username = Userdata[0].Username
     const Password = Userdata[1].Password
 
-    var response = databaseUtils.userLogin(Username, Password)
+    var response = await databaseUtils.userLogin(Username, Password)
 
-    if (response = 404) {
+    if (response === 404) {
         return res.send({ UserExists: response });
     }
 
+    return res.send({ UserExists: 200 });
+})
+
+app.post('/register', async (req, res) => {
+    const Userdata = req.body.Userdata
 
 
+    const Username = Userdata[0].username
+    const Password = Userdata[1].password
 
 
+    const response = await databaseUtils.userRegister(Username, Password)
 
+    if (response === 201) {
+        return res.send(201)
+    }
+
+    res.send(200)
 })
 
 app.listen(process.env.PORT, () => { console.log(`Website is running on http://127.0.0.1:${process.env.PORT}`) })
